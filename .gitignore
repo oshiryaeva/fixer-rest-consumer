@@ -3,5 +3,6 @@
 /.jpb/
 /.idea/
 /.gradle/
-/gradlew
 /gradlew.bat
+/.gradle/
+/src/test/
