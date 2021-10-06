@@ -13,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class FixerRestConsumerApplication {
 
-
     public static void main(String[] args) {
         SpringApplication.run(FixerRestConsumerApplication.class, args);
     }
@@ -27,6 +26,5 @@ public class FixerRestConsumerApplication {
     public Logger logger() {
         return LoggerFactory.getLogger(FixerRestConsumerApplication.class);
     }
-
 
 }
