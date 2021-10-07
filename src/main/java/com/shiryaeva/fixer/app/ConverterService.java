@@ -10,11 +10,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Date;
-import java.util.List;
 
 @Component
 public class ConverterService {
@@ -22,13 +19,8 @@ public class ConverterService {
     @Autowired
     private ApplicationContext context;
 
-    @Autowired
-    private EntityManager entityManager;
-
     public BigDecimal convertCurrency(Symbol target, int amount) {
         CurrencyRepository currencyRepository = context.getBean(CurrencyRepository.class);
-        RateEntityRepository rateRepository = context.getBean(RateEntityRepository.class);
-
         CurrencyEntity currencyEntity = currencyRepository.findTopByOrderByIdDesc();
         RateEntity rate = currencyEntity.getRateEntities()
                 .stream()

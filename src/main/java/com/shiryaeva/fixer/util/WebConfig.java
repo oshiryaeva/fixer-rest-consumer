@@ -1,4 +1,4 @@
-package com.shiryaeva.fixer.app;
+package com.shiryaeva.fixer.util;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

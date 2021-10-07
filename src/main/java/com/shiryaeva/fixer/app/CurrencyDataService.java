@@ -26,23 +26,30 @@ public class CurrencyDataService {
 
 
     public void convertFixerResponseToData(CurrencyDTO currencyDTO) {
-        logger.info("=======================");
-        logger.info("Saving rates to database...");
-        logger.info("=======================");
+        CurrencyRepository currencyRepository = context.getBean(CurrencyRepository.class);
         CurrencyEntity currencyEntity = new CurrencyEntity();
         currencyEntity.setBase(currencyDTO.getBase());
         currencyEntity.setDate(currencyDTO.getDate());
         currencyEntity.setTimestamp(currencyDTO.getTimestamp());
-        CurrencyRepository currencyRepository = context.getBean(CurrencyRepository.class);
-        currencyRepository.save(currencyEntity);
+        if (newRateAvailable(currencyEntity, currencyRepository.findTopByOrderByIdDesc())) {
 
-        RateEntityRepository rateRepository = context.getBean(RateEntityRepository.class);
-        for (Map.Entry<String, BigDecimal> entry : currencyDTO.getRates().entrySet()) {
-            RateEntity rateEntity = new RateEntity();
-            rateEntity.setTarget(Symbol.fromId(entry.getKey()));
-            rateEntity.setRate(entry.getValue());
-            rateEntity.setCurrencyEntity(currencyEntity);
-            rateRepository.save(rateEntity);
+            logger.info("=======================");
+            logger.info("Saving rates to database...");
+            logger.info("=======================");
+
+            currencyRepository.save(currencyEntity);
+            RateEntityRepository rateRepository = context.getBean(RateEntityRepository.class);
+            for (Map.Entry<String, BigDecimal> entry : currencyDTO.getRates().entrySet()) {
+                RateEntity rateEntity = new RateEntity();
+                rateEntity.setTarget(Symbol.fromId(entry.getKey()));
+                rateEntity.setRate(entry.getValue());
+                rateEntity.setCurrencyEntity(currencyEntity);
+                rateRepository.save(rateEntity);
+            }
         }
+    }
+
+    private boolean newRateAvailable(CurrencyEntity candidate, CurrencyEntity latest) {
+        return !candidate.equals(latest);
     }
 }
